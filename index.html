@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flexible Time Zone Converter</title>
+    <title>Flexible Time Zone Range Converter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,10 +25,16 @@
     </style>
 </head>
 <body>
-    <h1>Flexible Time Zone Converter</h1>
-    <label for="timeInput">Enter time (0-23):</label>
-    <input type="number" id="timeInput" min="0" max="23" placeholder="e.g., 15">
+    <h1>Flexible Time Zone Range Converter</h1>
+
+    <!-- 시간 범위 입력 -->
+    <label for="startTime">Enter start time (0-23):</label>
+    <input type="number" id="startTime" min="0" max="23" placeholder="e.g., 15">
     
+    <label for="endTime">Enter end time (0-23):</label>
+    <input type="number" id="endTime" min="0" max="23" placeholder="e.g., 18">
+
+    <!-- 기준 시간대 선택 -->
     <label for="timezoneSelect">Select Base Time Zone:</label>
     <select id="timezoneSelect">
         <option value="0">California (PT)</option>
@@ -37,30 +43,46 @@
         <option value="8">Manchester (GMT)</option>
     </select>
     
-    <button onclick="convertTime()">Convert</button>
+    <button onclick="convertTimeRange()">Convert</button>
+
+    <!-- 결과 출력 -->
     <div class="output" id="output"></div>
 
     <script>
-        function convertTime() {
-            const timeInput = parseInt(document.getElementById("timeInput").value);
+        function convertTimeRange() {
+            const startTime = parseInt(document.getElementById("startTime").value);
+            const endTime = parseInt(document.getElementById("endTime").value);
             const baseTimezoneOffset = parseInt(document.getElementById("timezoneSelect").value);
 
-            if (isNaN(timeInput) || timeInput < 0 || timeInput > 23) {
-                document.getElementById("output").innerHTML = "<p>Please enter a valid hour (0-23).</p>";
+            // 입력된 시간이 올바른지 확인
+            if (isNaN(startTime) || isNaN(endTime) || startTime < 0 || startTime > 23 || endTime < 0 || endTime > 23) {
+                document.getElementById("output").innerHTML = "<p>Please enter valid start and end hours (0-23).</p>";
                 return;
             }
 
-            const californiaTime = (24 + timeInput - baseTimezoneOffset) % 24;
-            const chicagoTime = (californiaTime + 2) % 24;
-            const newYorkTime = (californiaTime + 3) % 24;
-            const manchesterTime = (californiaTime + 8) % 24;
+            // 시간이 24시간 범위를 넘어갈 경우 조정
+            const calculateTime = (time, offset) => (24 + time - offset) % 24;
 
+            // 각 시간대의 시작과 끝 시간 계산
+            const californiaStart = calculateTime(startTime, baseTimezoneOffset);
+            const californiaEnd = calculateTime(endTime, baseTimezoneOffset);
+
+            const chicagoStart = (californiaStart + 2) % 24;
+            const chicagoEnd = (californiaEnd + 2) % 24;
+
+            const newYorkStart = (californiaStart + 3) % 24;
+            const newYorkEnd = (californiaEnd + 3) % 24;
+
+            const manchesterStart = (californiaStart + 8) % 24;
+            const manchesterEnd = (californiaEnd + 8) % 24;
+
+            // 결과 출력
             document.getElementById("output").innerHTML = `
-                <p><strong>Base Time:</strong> ${timeInput}:00 (Selected Time Zone)</p>
-                <p><strong>California (PT):</strong> ${californiaTime}:00 - ${(californiaTime + 1) % 24}:00</p>
-                <p><strong>Chicago (CT):</strong> ${chicagoTime}:00 - ${(chicagoTime + 1) % 24}:00</p>
-                <p><strong>New York (ET):</strong> ${newYorkTime}:00 - ${(newYorkTime + 1) % 24}:00</p>
-                <p><strong>Manchester (GMT):</strong> ${manchesterTime}:00 - ${(manchesterTime + 1) % 24}:00</p>
+                <p><strong>Base Time Zone (${startTime}:00 - ${endTime}:00)</strong></p>
+                <p><strong>California (PT):</strong> ${californiaStart}:00 - ${californiaEnd}:00</p>
+                <p><strong>Chicago (CT):</strong> ${chicagoStart}:00 - ${chicagoEnd}:00</p>
+                <p><strong>New York (ET):</strong> ${newYorkStart}:00 - ${newYorkEnd}:00</p>
+                <p><strong>Manchester (GMT):</strong> ${manchesterStart}:00 - ${manchesterEnd}:00</p>
             `;
         }
     </script>
