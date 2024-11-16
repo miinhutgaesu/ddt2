@@ -1,6 +1,7 @@
 const timeSlots = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
-const userId = "user-1"; 
+const userId = "user-1";  // 사용자 ID를 설정합니다. 이 ID는 각 사용자를 구별하는 데 사용됩니다.
 
+// 스케줄 테이블 생성
 function generateTimeTable() {
     const date = document.getElementById("dateInput").value;
     const timezoneOffset = parseInt(document.getElementById("timezoneSelect").value, 10);
@@ -65,6 +66,8 @@ function generateTimeTable() {
         });
     });
 }
+
+// 날짜와 시간대 변경 시 스케줄 테이블 재생성
 
 document.getElementById("dateInput").addEventListener("change", generateTimeTable);
 document.getElementById("timezoneSelect").addEventListener("change", generateTimeTable);

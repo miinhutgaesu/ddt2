@@ -1,0 +1,31 @@
+/* 기본 스타일 */
+body {
+    font-family: Arial, sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* 시간 슬롯 셀 기본 스타일 */
+.action-cell {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 시간 슬롯이 선택되었을 때 스타일 */
+.selected {
+    background-color: lightblue;
+    color: white;
+}
