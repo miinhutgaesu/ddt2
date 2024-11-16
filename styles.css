@@ -1,23 +1,146 @@
+/* Global Style for Body */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #343a40;
 }
 
+/* General Layout Styling */
+#container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-weight: 700;
+    color: #343a40;
+    margin-bottom: 30px;
+}
+
+/* Styling the Time Table */
 #timeTable {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
     margin-top: 20px;
 }
 
 .time-slot {
-    padding: 15px;
+    padding: 20px;
     text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    background-color: #ffffff;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+}
+
+.time-slot:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border-color: #007bff;
 }
 
 .time-slot.selected {
-    background-color: #28a745;
-    color: white;
+    background-color: #007bff;
+    color: #ffffff;
+    border-color: #0056b3;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
 }
+
+.time-slot.unavailable {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Form Input Styling */
+input[type="text"], input[type="date"], select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    font-size: 16px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+/* Button Styling */
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Container Styling for Inputs */
+#userInputs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    #timeTable {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+
+    button, input[type="text"], input[type="date"], select {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .time-slot {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+}
+
+/* Additional Styling for Headings and Buttons */
+h2 {
+    text-align: center;
+    color: #495057;
+}
+
+button#resetSelections {
+    background-color: #dc3545;
+    margin-left: 15px;
+}
+
+button#resetSelections:hover {
+    background-color: #c82333;
+} 
