@@ -1,31 +1,23 @@
-/* 기본 스타일 */
 body {
     font-family: Arial, sans-serif;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+#timeTable {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-top: 20px;
 }
 
-td, th {
-    border: 1px solid #ddd;
-    padding: 10px;
+.time-slot {
+    padding: 15px;
     text-align: center;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-/* 시간 슬롯 셀 기본 스타일 */
-.action-cell {
+    border: 1px solid #ccc;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-/* 시간 슬롯이 선택되었을 때 스타일 */
-.selected {
-    background-color: lightblue;
+.time-slot.selected {
+    background-color: #28a745;
     color: white;
 }
