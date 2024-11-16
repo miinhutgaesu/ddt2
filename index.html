@@ -3,88 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flexible Time Zone Range Converter</title>
+    <title>Time Zone Scheduler</title>
+
+    <!-- Firebase 호환 가능한 SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <!-- Firebase 설정 및 초기화 -->
+    <script>
+        // Firebase 설정 정보 (Firebase 콘솔에서 제공된 정보를 여기에 입력)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Firebase 초기화
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    </script>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        label, input, button, select, p {
-            margin: 10px 0;
-        }
-        input, button, select {
-            padding: 10px;
-            font-size: 1rem;
-        }
-        .output {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
+        .selected {
+            background-color: lightblue;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h1>Flexible Time Zone Range Converter</h1>
+    <h1>Time Zone Scheduler</h1>
 
-    <!-- 시간 범위 입력 -->
-    <label for="startTime">Enter start time (0-23):</label>
-    <input type="number" id="startTime" min="0" max="23" placeholder="e.g., 15">
-    
-    <label for="endTime">Enter end time (0-23):</label>
-    <input type="number" id="endTime" min="0" max="23" placeholder="e.g., 18">
-
-    <!-- 기준 시간대 선택 -->
-    <label for="timezoneSelect">Select Base Time Zone:</label>
+    <label for="timezoneSelect">Select Time Zone:</label>
     <select id="timezoneSelect">
-        <option value="0">California (PT)</option>
-        <option value="2">Chicago (CT)</option>
-        <option value="3">New York (ET)</option>
-        <option value="8">Manchester (GMT)</option>
+        <option value="-8">PST (Pacific Standard Time, California)</option>
+        <option value="-6">CST (Central Standard Time, Chicago)</option>
+        <option value="-5">EST (Eastern Standard Time, New York)</option>
+        <option value="0">GMT (Greenwich Mean Time, Manchester)</option>
     </select>
-    
-    <button onclick="convertTimeRange()">Convert</button>
+    <label for="dateInput">Select Date:</label>
+    <input type="date" id="dateInput">
 
-    <!-- 결과 출력 -->
-    <div class="output" id="output"></div>
+    <div id="scheduleTable" style="margin-top: 20px;">
+        <table border="1" style="width: 50%; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="time-table"></tbody>
+        </table>
+    </div>
 
-    <script>
-        function convertTimeRange() {
-            const startTime = parseInt(document.getElementById("startTime").value);
-            const endTime = parseInt(document.getElementById("endTime").value);
-            const baseTimezoneOffset = parseInt(document.getElementById("timezoneSelect").value);
-
-            // 입력된 시간이 올바른지 확인
-            if (isNaN(startTime) || isNaN(endTime) || startTime < 0 || startTime > 23 || endTime < 0 || endTime > 23) {
-                document.getElementById("output").innerHTML = "<p>Please enter valid start and end hours (0-23).</p>";
-                return;
-            }
-
-            // 시간이 24시간 범위를 넘어갈 경우 조정
-            const calculateTime = (time, offset) => (24 + time - offset) % 24;
-
-            // 각 시간대의 시작과 끝 시간 계산
-            const californiaStart = calculateTime(startTime, baseTimezoneOffset);
-            const californiaEnd = calculateTime(endTime, baseTimezoneOffset);
-
-            const chicagoStart = (californiaStart + 2) % 24;
-            const chicagoEnd = (californiaEnd + 2) % 24;
-
-            const newYorkStart = (californiaStart + 3) % 24;
-            const newYorkEnd = (californiaEnd + 3) % 24;
-
-            const manchesterStart = (californiaStart + 8) % 24;
-            const manchesterEnd = (californiaEnd + 8) % 24;
-
-            // 결과 출력
-            document.getElementById("output").innerHTML = `
-                <p><strong>Base Time Zone (${startTime}:00 - ${endTime}:00)</strong></p>
-                <p><strong>California (PT):</strong> ${californiaStart}:00 - ${californiaEnd}:00</p>
-                <p><strong>Chicago (CT):</strong> ${chicagoStart}:00 - ${chicagoEnd}:00</p>
-                <p><strong>New York (ET):</strong> ${newYorkStart}:00 - ${newYorkEnd}:00</p>
-                <p><strong>Manchester (GMT):</strong> ${manchesterStart}:00 - ${manchesterEnd}:00</p>
-            `;
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
